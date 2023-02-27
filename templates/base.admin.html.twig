@@ -144,7 +144,7 @@
                         <li class="dropdown nav-item">
                             <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
                                 <div class="photo">
-                                    <img src="../assets/img/anime3.png" alt="Profile Photo">
+                                    <img src="{{ asset("assets/img/anime3.png") }}" alt="Profile Photo">
                                 </div>
                                 <b class="caret d-none d-lg-block d-xl-block"></b>
                                 <p class="d-lg-none">
@@ -225,6 +225,108 @@
         </ul>
     </div>
 </div>
+<script>
+    // Sélectionnez le body à observer
+    const bodyNode = document.querySelector('body');
+
+    // Options pour le MutationObserver (spécifier les types de mutation à observer)
+    const config = { attributes: true, attributeFilter: ['class'] };
+
+    // Créer une instance de MutationObserver avec une fonction de callback
+    const observer = new MutationObserver(function(mutationsList, observer) {
+        for(let mutation of mutationsList) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                console.log('La classe du body a changé !');
+                if (bodyNode.classList.contains("white-content")){
+                    selects = document.getElementsByTagName("select");
+                    for (var i = 0; i < selects.length; i++){
+                        selects[i].style.background="#fff";
+                        //
+                    }
+                } else {
+                    selects = document.getElementsByTagName("select");
+                    for (var i = 0; i < selects.length; i++){
+                        selects[i].style.background="#282c3c";
+                        //
+                    }
+                }
+            }
+        }
+    });
+
+    // Commencer à observer le body
+    observer.observe(bodyNode, config);
+
+</script>
+<script>
+    selects = document.getElementsByTagName("select");
+    for (var i = 0; i < selects.length; i++){
+        selects[i].style.background="#282c3c";
+        //
+    }
+
+    let select = document.getElementById("testClient");
+    let old = document.getElementById("oldClient");
+    let newForm = document.getElementById("newClient");
+
+    select.addEventListener("change", function (){
+        if (select.value === "n"){
+            old.style.display="block";
+            newForm.style.display="none";
+        } else {
+            old.style.display="none";
+            newForm.style.display="block";
+        }
+    })
+
+</script>
+
+<script>
+    let typeOldPiece = document.getElementById("piecePieceOld1");
+    let oldPieceText = document.getElementById("nomPieceOld");
+    typeOldPiece.addEventListener("change", function (){
+        if (typeOldPiece.value === "passeport"){
+            oldPieceText.textContent = "Numero de passeport"
+        } else {
+            oldPieceText.textContent = "Numero de carte d'identite"
+        }
+    })
+
+</script>
+
+<script>
+
+    let newPieceText = document.getElementById("nomPiece");
+    let typeNewPiece = document.getElementById("pieceIdentite");
+    typeNewPiece.addEventListener("change", function (){
+        if (typeNewPiece.value === "passeport"){
+            newPieceText.textContent = "Numero de passeport"
+        } else {
+            newPieceText.textContent = "Numero de carte d'identite"
+        }
+    })
+</script>
+
+<script>
+    var selectTypeCompte = document.getElementById("typeCompte");
+    var textTypeCompte = document.getElementById("texteTypeCompte");
+    var inputArea = document.getElementById("tauxCompte");
+    selectTypeCompte.addEventListener("change", function (){
+        //alert(selectTypeCompte.value);
+        if (selectTypeCompte.value==8){
+            textTypeCompte.textContent="Taux d'interet"
+            inputArea.style.display = "block";
+        }
+        if (selectTypeCompte.value==9){
+            textTypeCompte.textContent="Taux agios"
+            inputArea.style.display = "block";
+        }
+        if (selectTypeCompte.value==="pro"){
+            inputArea.style.display = "none";
+            textTypeCompte.textContent="";
+        }
+    })
+</script>
 <!--   Core JS Files   -->
 <script src="{{ asset("assets/js/core/jquery.min.js") }}"></script>
 <script src="{{ asset("assets/js/core/popper.min.js") }}"></script>

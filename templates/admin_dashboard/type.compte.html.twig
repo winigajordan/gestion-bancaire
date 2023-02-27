@@ -1,0 +1,144 @@
+{% extends 'admin_dashboard/index.html.twig' %}
+
+{% block action %}
+    <div class="container">
+       <div class="row">
+           <div class="col-5">
+               <div class="card p-3">
+                   <div class="card-header">
+                      Ajour de type de compte
+                       {% for message in app.flashes('done') %}
+                           <div class="toast m-5" role="alert" aria-live="assertive" aria-atomic="true">
+                               <div class="alert alert-success alert-with-icon" data-notify="container">
+                                   <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                                       <i class="tim-icons icon-simple-remove"></i>
+                                   </button>
+                                   <span data-notify="icon" class="tim-icons icon-bell-55"></span>
+                                   <span data-notify="message"> {{ message }}</span>
+                               </div>
+                           </div>
+                       {% endfor %}
+                       <form id="form2" {% if selected is not defined %} action="{{ path('admin_load_type_compte_add') }}"  {% else %}  action="{{ path('admin_load_type_compte_update') }}" {% endif %} method="post">
+                          <div class="row d-flex align-items-center my-3">
+                              <div class="col-6">
+                                  <label> Nom du type de compte</label>
+                              </div>
+                              <div class="col-6">
+                                  <input type="text"  name="nom" class="form-control" id="inputEmail4" placeholder="Nom" {% if selected is defined %} value="{{ selected.nom}}"{% endif %}>
+                              </div>
+                          </div>
+                           <div class="row d-flex align-items-center mb-3">
+                               <div class="col-6">
+                                   <label> Description </label>
+                               </div>
+                               <div class="col-6">
+                                   <textarea name="description" class="form-control">{% if selected is defined %}{{ selected.description}}{% endif %}</textarea>
+                               </div>
+                           </div>
+
+                           <div class="row d-flex align-items-center mb-3">
+                               <div class="col-6">
+                                   <label> Frais d'ouverture</label>
+                               </div>
+                               <div class="col-6">
+                                   <input type="number" min="0" name="fraisOuverture" class="form-control" id="inputEmail4" placeholder="Frais ouverture" {% if selected is defined %} value="{{ selected.fraisOuverture}}"{% endif %}>
+                               </div>
+                           </div>
+
+                           <div class="row d-flex align-items-center mb-3">
+                               <div class="col-6">
+                                   <label> Solde min</label>
+                               </div>
+                               <div class="col-6">
+                                   <input type="number" min="0" name="solde" class="form-control" id="inputEmail4" placeholder="Frais ouverture" {% if selected is defined %} value="{{ selected.soldeMin}}"{% endif %}>
+                               </div>
+                           </div>
+
+
+                           <div class="row d-flex align-items-center mb-3">
+                               <div class="col-6">
+                                   <label> Plafond retrait</label>
+                               </div>
+                               <div class="col-6">
+                                   <input type="number" min="0" name="plafond" class="form-control" id="inputEmail4" placeholder="PlafondRetrait" {% if selected is defined %} value="{{ selected.plafondRetrait}}"{% endif %}>
+                               </div>
+                           </div>
+                           <div class="row d-flex align-items-center mb-3">
+                               <div class="col-6">
+                                   <label> Taux Interet</label>
+                               </div>
+                               <div class="col-6">
+                                   <input type="number" min="0" name="tauxInteret" step="0.01" class="form-control" id="inputEmail4" placeholder="Taux Interer" {% if selected is defined %} value="{{ selected.tauxInteret}}"{% endif %}>
+                               </div>
+                           </div>
+                           <div class="row d-flex align-items-center mb-3">
+                               <div class="col-6">
+                                   <label> Taux decouvert</label>
+                               </div>
+                               <div class="col-6">
+                                   <input type="number" min="0" step="0.01" name="tauxDecouvert" class="form-control" id="inputEmail4" placeholder="Taux Decouvert" {% if selected is defined %} value="{{ selected.tauxInteretDecouvert}}"{% endif %}>
+                               </div>
+                           </div>
+                           <div class="row d-flex align-items-center mb-3">
+                               <div class="col-6">
+                                   <label> Code</label>
+                               </div>
+                               <div class="col-6">
+                                   <input type="text"  name="code" class="form-control" id="inputEmail4" placeholder="Code" {% if selected is defined %} value="{{ selected.code}}"{% endif %}>
+                               </div>
+                           </div>
+                           {% if selected is defined %}
+                                <input type="number" name="id" value="{{ selected.id }}" hidden>
+                               <input type="submit" class="form-control btn" value="Modifier">
+                           {% endif %}
+                           {% if selected is not defined %}
+                               <input type="submit" class="form-control btn" value="Enregistrer">
+                           {% endif %}
+                       </form>
+                   </div>
+               </div>
+           </div>
+           <div class="col-7">
+               <div class="card p-3">
+                    <div class="card header">
+                        Liste des comptes
+                    </div>
+                   <div class="card-body">
+                       <table class="table table-striped">
+                           <thead>
+                           <tr>
+                               <th scope="col">Nom</th>
+                               <th scope="col">Frais ouverture</th>
+                               <th scope="col">Solde Min</th>
+                               <th scope="col">Taux interet</th>
+                               <th scope="col"></th>
+                           </tr>
+                           </thead>
+                           <tbody>
+                           {% for tp in types %}
+                           <tr>
+                               <th>{{ tp.nom }}</th>
+                               <td>{{ tp.fraisOuverture }}</td>
+                               <td>{{ tp.soldeMin }}</td>
+                               <td>{{ tp.tauxInteret }}</td>
+                               <td>
+                                   <div class="dropdown">
+                                       <button type="button" class="btn btn-link dropdown-toggle btn-icon" data-toggle="dropdown" aria-expanded="false">
+                                           <i class="tim-icons icon-settings-gear-63"></i>
+                                       </button>
+                                       <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink" x-placement="bottom-end" style="position: absolute; transform: translate3d(-122px, 22px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                           <a class="dropdown-item" href="{{ path('admin_load_type_compte_detsils', {'id':tp.id}) }}">Details</a>
+                                       </div>
+                                   </div>
+                               </td>
+                           </tr>
+                            {% endfor %}
+                           </tbody>
+                       </table>
+                   </div>
+               </div>
+           </div>
+       </div>
+    </div>
+
+{% endblock %}

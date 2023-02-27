@@ -1,20 +1,22 @@
-{% extends 'base.html.twig' %}
+{% extends 'base.admin.html.twig' %}
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2>
+                Operations sur un compte client
+            </h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-4"> <a href="{{ path("caisse_load_depot") }}" class="btn btn-outline-success"> Effectuer un depot </a></div>
+                <div class="col-4"> <a href="{{ path('caisse_load_retrait') }}" class="btn btn-outline-success"> Effectuer un retrait</a></div>
+                <div class="col-4"> <a href="{{ path('app_transfert') }}" class="btn btn-outline-success"> Effectuer un transfert</a></div>
+            </div>
+        </div>
+    </div>
 
-{% block title %}Hello CaisseOperationController!{% endblock %}
+    {% block operation %} {% endblock operation %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/HP/Desktop/Jord/PERSO/PROJETS PERSO/Projet BISIC/GestionBancaire/src/Controller/CaisseOperationController.php'|file_link(0) }}">src/Controller/CaisseOperationController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/HP/Desktop/Jord/PERSO/PROJETS PERSO/Projet BISIC/GestionBancaire/templates/caisse_operation/index.html.twig'|file_link(0) }}">templates/caisse_operation/index.html.twig</a></code></li>
-    </ul>
 </div>
 {% endblock %}

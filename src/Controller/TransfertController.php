@@ -30,9 +30,9 @@ class TransfertController extends AbstractController
         $this->clientRepository = $clientRepository;
         $this->compteRepository = $compteRepository;
         $this->typeOperationRepository = $typeOperationRepository;
-        $this->envoie = $this->typeOperationRepository->find(3);
-        $this->reception = $this->typeOperationRepository->find(4);
         $this->manager = $manager;
+
+        $this->reception = $this->typeOperationRepository->find(4);
     }
 
     #[Route('/transfert/{client}/{compte}', name: 'app_transfert', defaults:['client'=>null, 'compte'=>null] )]
@@ -107,7 +107,7 @@ class TransfertController extends AbstractController
             ->setStatut('VALIDE')
             ->setSource($emeteur)
             ->setReceveur($receveur)
-            ->setType($this->envoie);
+            ->setType($this->typeOperationRepository->find(3));
         $emeteur->setSolde($emeteur->getSolde()-$montant);
         $receveur->setSolde($receveur->getSolde() + $montant);
 
