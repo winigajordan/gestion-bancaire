@@ -1,0 +1,21 @@
+{% extends 'base.admin.html.twig' %}
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2>
+                Operations sur un compte client
+            </h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-4"> <a href="{{ path("caisse_load_depot") }}" class="btn btn-outline-success"> Effectuer un depot </a></div>
+                <div class="col-4"> <a href="{{ path('caisse_load_retrait') }}" class="btn btn-outline-success"> Effectuer un retrait</a></div>
+                <div class="col-4"> <a href="{{ path('app_transfert') }}" class="btn btn-outline-success"> Effectuer un transfert</a></div>
+            </div>
+        </div>
+    </div>
+    {% block operation %} {% endblock operation %}
+
+</div>
+{% endblock %}

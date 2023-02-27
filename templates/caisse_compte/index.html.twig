@@ -1,0 +1,226 @@
+{% extends 'base.admin.html.twig' %}
+
+
+{% block content %}
+    <div class="container">
+
+
+        <div class="card" id="card">
+            <div class="card-header text-center">
+                <h3 class="mt-3">
+                    Creation de compte
+                </h3>
+            </div>
+            <div class="card-body mx-3">
+                <form method="post" action="{{ path('caisse_add_account') }}">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputState">Nouveau client ? </label>
+                            <select id="testClient" name="newClient" class="form-control">
+                                <option selected value="n">Non</option>
+                                <option value="y">Oui </option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="oldClient">
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4">Piece d'identite</label>
+                                        <select id="piecePieceOld1" name="typePieceOld" class="form-control">
+                                            <option selected value="passeport">Passeport</option>
+                                            <option value="cni"> CNI </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="inputEmail4" id="nomPieceOld">Numero de passport</label>
+                                        <input type="text" class="form-control" name="numeroPieceOld" id="inputEmail4" placeholder="Numero">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="newClient" style="display: none">
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <label for="inputEmail4">Nom</label>
+                                <input type="text" name="nom" class="form-control" id="inputEmail4" placeholder="Nom">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputEmail4">Prenom(s)</label>
+                                <input type="text" name="prenom" class="form-control" id="inputEmail4" placeholder="Prenom">
+                            </div>
+                            <div class="form-group col-md-5">
+                                <label for="inputPassword4">Email</label>
+                                <input type="email" name="email" class="form-control" id="inputPassword4" placeholder="Email">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputEmail4">Date de naissance</label>
+                                <input type="date" name="naissance" class="form-control" id="inputEmail4" placeholder="Naissance">
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="inputEmail4">Piece d'identite</label>
+                                <select id="pieceIdentite" name="typePiece" class="form-control bg-">
+                                    <option selected value="passeport">Passeport</option>
+                                    <option value="cni"> CNI </option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputEmail4" id="nomPiece">Numero de passport</label>
+                                <input type="text"  name="numeroPiece" class="form-control" id="inputEmail4" placeholder="Numero">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputEmail4" id="nomPiece">Date d'expiration</label>
+                                <input type="date" name="datePiece" class="form-control" id="inputEmail4" placeholder="Expiration">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAddress">Adresse</label>
+                            <input type="text" name="adresse" class="form-control" id="inputAddress" placeholder="">
+                        </div>
+                        <div class="form-row">
+
+                            <div class="form-group col-md-4">
+                                <label for="inputState">Pays</label>
+                                <input type="text" name="pays" class="form-control" id="inputCity">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="inputCity">Ville</label>
+                                <input type="text" name="ville" class="form-control" id="inputCity">
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="inputZip">Code postal</label>
+                                <input type="text" name="codePostal" class="form-control" id="inputZip">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail4">Type de compte </label>
+                            <select id="typeCompte" name="typeCompte" class="form-control ">
+                                {%for type in types %}
+                                    <option value="{{ type.id }}"> {{ type.nom }} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                    </div>
+
+                    <input type="submit" value="Creer un compte" class="btn btn-outline-light">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sélectionnez le body à observer
+        const bodyNode = document.querySelector('body');
+
+        // Options pour le MutationObserver (spécifier les types de mutation à observer)
+        const config = { attributes: true, attributeFilter: ['class'] };
+
+        // Créer une instance de MutationObserver avec une fonction de callback
+        const observer = new MutationObserver(function(mutationsList, observer) {
+            for(let mutation of mutationsList) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                    console.log('La classe du body a changé !');
+                    if (bodyNode.classList.contains("white-content")){
+                        selects = document.getElementsByTagName("select");
+                        for (var i = 0; i < selects.length; i++){
+                            selects[i].style.background="#fff";
+                            //
+                        }
+                    } else {
+                        selects = document.getElementsByTagName("select");
+                        for (var i = 0; i < selects.length; i++){
+                            selects[i].style.background="#282c3c";
+                            //
+                        }
+                    }
+                }
+            }
+        });
+
+        // Commencer à observer le body
+        observer.observe(bodyNode, config);
+
+    </script>
+    <script>
+        selects = document.getElementsByTagName("select");
+        for (var i = 0; i < selects.length; i++){
+            selects[i].style.background="#282c3c";
+            //
+        }
+
+        let select = document.getElementById("testClient");
+        let old = document.getElementById("oldClient");
+        let newForm = document.getElementById("newClient");
+
+        select.addEventListener("change", function (){
+            if (select.value === "n"){
+                old.style.display="block";
+                newForm.style.display="none";
+            } else {
+                old.style.display="none";
+                newForm.style.display="block";
+            }
+        })
+
+    </script>
+
+    <script>
+        let typeOldPiece = document.getElementById("piecePieceOld1");
+        let oldPieceText = document.getElementById("nomPieceOld");
+        typeOldPiece.addEventListener("change", function (){
+            if (typeOldPiece.value === "passeport"){
+                oldPieceText.textContent = "Numero de passeport"
+            } else {
+                oldPieceText.textContent = "Numero de carte d'identite"
+            }
+        })
+
+    </script>
+
+    <script>
+
+        let newPieceText = document.getElementById("nomPiece");
+        let typeNewPiece = document.getElementById("pieceIdentite");
+        typeNewPiece.addEventListener("change", function (){
+            if (typeNewPiece.value === "passeport"){
+                newPieceText.textContent = "Numero de passeport"
+            } else {
+                newPieceText.textContent = "Numero de carte d'identite"
+            }
+        })
+    </script>
+
+    <script>
+        var selectTypeCompte = document.getElementById("typeCompte");
+        var textTypeCompte = document.getElementById("texteTypeCompte");
+        var inputArea = document.getElementById("tauxCompte");
+        selectTypeCompte.addEventListener("change", function (){
+            //alert(selectTypeCompte.value);
+            if (selectTypeCompte.value==8){
+                textTypeCompte.textContent="Taux d'interet"
+                inputArea.style.display = "block";
+            }
+            if (selectTypeCompte.value==9){
+                textTypeCompte.textContent="Taux agios"
+                inputArea.style.display = "block";
+            }
+            if (selectTypeCompte.value==="pro"){
+                inputArea.style.display = "none";
+                textTypeCompte.textContent="";
+            }
+        })
+    </script>
+{% endblock %}
