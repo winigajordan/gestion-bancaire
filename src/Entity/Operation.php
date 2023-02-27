@@ -33,6 +33,7 @@ class Operation
     private ?Compte $receveur = null;
 
     #[ORM\ManyToOne(inversedBy: 'operations')]
+    #[ORM\Column(nullable: true)]
     private ?TypeOperation $type = null;
 
     public function getId(): ?int

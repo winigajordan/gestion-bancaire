@@ -9,14 +9,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CompteRepository::class)]
-#[ORM\InheritanceType(value: 'SINGLE_TABLE')]
-#[ORM\DiscriminatorMap(
-    [
-        'courant' => Courant::class,
-        'epargne' => Epargne::class,
-        'pro' => Pro::class,
-    ]
-)]
 class Compte
 {
     #[ORM\Id]
@@ -47,6 +39,10 @@ class Compte
 
     #[ORM\OneToMany(mappedBy: 'receveur', targetEntity: Operation::class)]
     private Collection $operationReception;
+
+    #[ORM\ManyToOne(inversedBy: 'comptes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?TypeCompte $type = null;
 
     public function __construct()
     {
@@ -187,6 +183,18 @@ class Compte
                 $operationReception->setReceveur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): ?TypeCompte
+    {
+        return $this->type;
+    }
+
+    public function setType(?TypeCompte $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

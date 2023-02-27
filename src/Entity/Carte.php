@@ -35,8 +35,7 @@ class Carte
     #[ORM\Column]
     private ?bool $etat = null;
 
-    #[ORM\ManyToOne(inversedBy: 'cartes')]
-    private ?Courant $compte = null;
+
 
     public function getId(): ?int
     {
@@ -127,15 +126,4 @@ class Carte
         return $this;
     }
 
-    public function getCompte(): ?Courant
-    {
-        return $this->compte;
-    }
-
-    public function setCompte(?Courant $compte): self
-    {
-        $this->compte = $compte;
-
-        return $this;
-    }
 }
