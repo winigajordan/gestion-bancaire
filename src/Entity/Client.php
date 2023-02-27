@@ -38,9 +38,6 @@ class Client extends User
     private ?string $typePieceIdentite = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $creationPieceIdentite = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $expirationPieceIdentite = null;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Compte::class)]
@@ -48,7 +45,7 @@ class Client extends User
 
     public function __construct()
     {
-        $this->roles = ['ROLE_CLIENT'];
+        $this->setRoles(['ROLE_CLIENT']);
         $this->comptes = new ArrayCollection();
     }
 
@@ -141,17 +138,6 @@ class Client extends User
         return $this;
     }
 
-    public function getCreationPieceIdentite(): ?\DateTimeInterface
-    {
-        return $this->creationPieceIdentite;
-    }
-
-    public function setCreationPieceIdentite(\DateTimeInterface $creationPieceIdentite): self
-    {
-        $this->creationPieceIdentite = $creationPieceIdentite;
-
-        return $this;
-    }
 
     public function getExpirationPieceIdentite(): ?\DateTimeInterface
     {

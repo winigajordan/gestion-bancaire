@@ -15,7 +15,7 @@ class Caissier extends User
 
     public function __construct()
     {
-        $this->roles = ['ROLE_CAISSIER'];
+        $this->setRoles(['ROLE_CAISSIER']) ;
     }
 
     public function getId(): ?int
