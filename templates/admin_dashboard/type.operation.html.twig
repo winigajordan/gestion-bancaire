@@ -1,0 +1,95 @@
+{% extends 'admin_dashboard/index.html.twig' %}
+
+{% block action %}
+    <div class="container">
+       <div class="row">
+           <div class="col-5">
+               <div class="card p-3">
+                   <div class="card-header">
+                      Ajour de type d'operation
+                       {% for message in app.flashes('done') %}
+                           <div class="toast m-5" role="alert" aria-live="assertive" aria-atomic="true">
+                               <div class="alert alert-success alert-with-icon" data-notify="container">
+                                   <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                                       <i class="tim-icons icon-simple-remove"></i>
+                                   </button>
+                                   <span data-notify="icon" class="tim-icons icon-bell-55"></span>
+                                   <span data-notify="message"> {{ message }}</span>
+                               </div>
+                           </div>
+                       {% endfor %}
+                   </div>
+                   <form id="form2" {% if selected is not defined %} action="{{ path('admin_load_type_operation_add') }}"  {% else %}  action="{{ path('admin_load_type_operation_update') }}" {% endif %} method="post">
+                       <div class="row d-flex align-items-center my-3">
+                           <div class="col-6">
+                               <label> Libelle </label>
+                           </div>
+                           <div class="col-6">
+                               <input type="text"  name="libelle" class="form-control" id="inputEmail4" placeholder="Nom" {% if selected is defined %} value="{{ selected.libelle}}"{% endif %}>
+                           </div>
+                       </div>
+                       <div class="row d-flex align-items-center my-3">
+                           <div class="col-6">
+                               <label> Sens </label>
+                           </div>
+                           <div class="col-6">
+                               <select id="typeCompte" name="sens" class="form-control ">
+                                   <option value="+"> Crediteur </option>
+                                   <option value="-"> Debiteur </option>
+                               </select>
+                           </div>
+                       </div>
+                       <div class="row d-flex align-items-center my-3">
+                           <div class="col-6">
+                               <label> Description </label>
+                           </div>
+                           <div class="col-6">
+                               <textarea name="description" class="form-control">{% if selected is defined %}{{ selected.libelle}}{% endif %}</textarea>
+                           </div>
+                       </div>
+                       {% if selected is defined %}
+                            <input type="number" name="id" value="{{ selected.id }}" hidden>
+                           <input type="submit" value="Modifier" class="btn btn-outline-primary">
+                       {% else %}
+                           <input type="submit" value="Ajouter" class="btn btn-outline-primary">
+                       {% endif %}
+
+
+                   </form>
+               </div>
+           </div>
+           <div class="col-7">
+               <div class="card p-3">
+                   <table class="table table-striped">
+                       <thead>
+                       <tr>
+                           <th scope="col">Libelle</th>
+                           <th scope="col">Sens</th>
+                           <th scope="col"></th>
+                       </tr>
+                       </thead>
+                       <tbody>
+                       {% for tp in types %}
+                       <tr>
+                           <th>{{ tp.libelle }}</th>
+                           <td>{% if tp.sens == "+" %} Debiteur {% else %} Crediteur {% endif %}</td>
+                           <td>
+                               <div class="dropdown">
+                                   <button type="button" class="btn btn-link dropdown-toggle btn-icon" data-toggle="dropdown" aria-expanded="false">
+                                       <i class="tim-icons icon-settings-gear-63"></i>
+                                   </button>
+                                   <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink" x-placement="bottom-end" style="position: absolute; transform: translate3d(-122px, 22px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                       <a class="dropdown-item" href="{{ path('admin_load_type_operation_details', {'id':tp.id}) }}">Details</a>
+                                   </div>
+                               </div>
+                           </td>
+                       </tr>
+                       {% endfor%}
+                       </tbody>
+                   </table>
+               </div>
+
+           </div>
+       </div>
+    </div>
+{% endblock %}
