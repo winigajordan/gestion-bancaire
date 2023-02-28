@@ -7,6 +7,7 @@ use App\Entity\Compte;
 use App\Repository\ClientRepository;
 use App\Repository\TypeCompteRepository;
 use App\Services\Generator;
+use App\Services\MailApi\MailSender;
 use Doctrine\ORM\EntityManagerInterface;
 use phpDocumentor\Reflection\TypeResolver;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -25,12 +26,14 @@ class CaisseCompteController extends AbstractController
     private TypeCompteRepository $typeCompteRepository;
     private ClientRepository $clientRepository;
     private Generator $generator;
+    private MailSender $sender;
     public function __construct(
         UserPasswordHasherInterface $hasher,
         EntityManagerInterface $manager,
         TypeCompteRepository $typeCompteRepository,
         ClientRepository $clientRepository,
-        Generator $generator
+        Generator $generator,
+        MailSender $sender,
     )
     {
         $this->hasher = $hasher;
@@ -38,6 +41,7 @@ class CaisseCompteController extends AbstractController
         $this->typeCompteRepository = $typeCompteRepository;
         $this->generator = $generator;
         $this->clientRepository = $clientRepository;
+        $this->sender = $sender;
     }
 
     #[Route('/caisse/compte', name: 'caisse_compte')]
@@ -69,7 +73,10 @@ class CaisseCompteController extends AbstractController
                 ->setExpirationPieceIdentite(\DateTime::createFromFormat('Y-m-d', $data->get('datePiece')));
             $pdwTxt = date_format(new \DateTime(), 'Y-i-s-m-H');
             $client->setPassword($this->hasher->hashPassword($client,$pdwTxt));
+            $content = "\n \n Votre compte vient d'etre cree. vos identifiants sont les suivants \n \n Login : ".$client->getEmail()."\n Password : ".$pdwTxt;
+            $this->sender->send($client->getEmail(), $client->getPrenom().' '.$client->getNom(), 'Creation de compte', $content);
             $this->manager->persist($client);
+
         } else {
             $client = $this->clientRepository->findOneBy(['pieceIdentite'=>$data->get('numeroPieceOld')]);
             if ($client == null){

@@ -1,0 +1,104 @@
+{% extends 'admin_dashboard/index.html.twig' %}
+{% block action %}
+    <div class="container">
+        {% for message in app.flashes('done') %}
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="alert alert-success alert-with-icon" data-notify="container">
+                    <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                        <i class="tim-icons icon-simple-remove"></i>
+                    </button>
+                    <span data-notify="icon" class="tim-icons icon-bell-55"></span>
+                    <span data-notify="message"> {{ message }}</span>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="card">
+            <div class="p-3">
+
+                <form class="mt-4" action="{{ path('admin_stat_show') }}" method="post">
+                    <div class="row d-flex align-items-center justify-content-center">
+                        <div class="col-auto">
+                            <div class="row d-flex align-items-center">
+                                <div class="col-auto">
+                                    <label> Debut </label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="date"  name="debut" class="form-control" id="inputEmail4">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-auto">
+                            <div class="row d-flex align-items-center">
+                                <div class="col-auto">
+                                    <label> Fin </label>
+                                </div>
+                                <div class="col-auto">
+                                    <input type="date"  name="fin" class="form-control" id="inputEmail4" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <input type="submit" class="btn btn-sm" value="Resultats">
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    {% if compte is defined %}
+    <div class="card p-3">
+        <div class="row my-4 align-items-center">
+            <div class="col-md-6"><p>Nombre de compte cree : {{ compte }} Comptes</p></div>
+            <div class="col-md-6"> <p>Montant total de depot : {{depot }} XOF</p></div>
+            <div class="col-md-6"><p>Montant total de retrait  : {{ retrait }} XOF</p></div>
+            <div class="col-md-6"><p>Montant total transfere {{ transfert }}</p></div>
+        </div>
+    </div>
+
+    <div class="card p-3">
+
+            <div class="">
+                <div class="row d-flex align-items-center">
+                    <div class="col-auto">
+                        <p>Liste des operations</p>
+                    </div>
+
+
+                </div>
+
+
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">type</th>
+                        <th scope="col">Montant</th>
+                        <th scope="col">Source</th>
+                        <th scope="col">Receveur</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for op in operations %}
+                        <tr class="source">
+                            <th scope="row">{{ op.date|date('Y-m-d H:i:s')}}</th>
+                            <td>{{ op.type.libelle }}</td>
+                            <td>{{ op.montant }}</td>
+                            <td>{{ op.source.numero }} -- {{ op.source.client.nom }} {{ op.source.client.prenom }}</td>
+                            <td> {% if op.receveur is not null %}{{ op.receveur.numero }} -- {{ op.receveur.client.nom }} {{ op.receveur.client.prenom }}  {% else %} - {% endif %} </td>
+                        </tr>
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+    </div>
+    {% endif %}
+
+    </div>
+
+
+{% endblock %}
