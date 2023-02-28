@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Operation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,6 +38,19 @@ class OperationRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findByDate($date1, $date2, $manager)
+    {
+
+        $query = $manager->createQueryBuilder()
+            ->select('e')
+        ->from(Operation::class, 'e')
+        ->where('e.date BETWEEN :start_date AND :end_date')
+        ->setParameter('start_date', $date1)
+        ->setParameter('end_date', $date2)
+        ->getQuery();
+        return $query->getResult();
     }
 
 //    /**

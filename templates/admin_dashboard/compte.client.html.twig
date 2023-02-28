@@ -1,0 +1,168 @@
+{% extends 'admin_dashboard/index.html.twig' %}
+{% block action %}
+    <div class="container">
+
+            {% for message in app.flashes('done') %}
+
+                <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="alert alert-success alert-with-icon" data-notify="container">
+                        <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                            <i class="tim-icons icon-simple-remove"></i>
+                        </button>
+                        <span data-notify="icon" class="tim-icons icon-bell-55"></span>
+                        <span data-notify="message"> {{ message }}</span>
+                    </div>
+                </div>
+            {% endfor %}
+            {% for message in app.flashes('error') %}
+
+                <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="alert alert-danger alert-with-icon" data-notify="container">
+                        <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                            <i class="tim-icons icon-simple-remove"></i>
+                        </button>
+                        <span data-notify="icon" class="tim-icons icon-bell-55"></span>
+                        <span data-notify="message"> {{ message }}</span>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+       <div class="card p-3">
+           <form class="mt-1" action="{{ path('admin_compte_search') }}" method="post">
+               <div class="row h-100 justify-content-center align-items-center">
+
+                   <div class="col-auto">
+                       <label> Numero De Paaseport / CNI </label>
+                   </div>
+                   <div class="col-auto">
+                       <input type="text"  name="code" class="form-control" id="inputEmail4" placeholder="Numero" {% if client is defined %} value="{{ client.pieceIdentite}}" disabled{% endif %}>
+                   </div>
+                   <input type="submit" class="btn btn-sm" value="Rechercher un client">
+               </div>
+           </form>
+       </div>
+
+        {% if client is defined %}
+        <div class="card p-3">
+            <div class="row my-4 align-items-center">
+                <div class="col-md-6"><p>Nom : {{ client.nom }}</p></div>
+                <div class="col-md-6"> <p>Prenom : {{client.prenom }}</p></div>
+                <div class="col-md-6"><p>Numero de piece : {{ client.pieceIdentite }}</p></div>
+                <div class="col-md-6"><p>Type de piece : {{ client.typePieceIdentite }}</p></div>
+            </div>
+            <div class="row d-flex align-items-center">
+
+                <div class="col-auto">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Liste des comptes du client
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            {% for cpt in client.comptes %}
+                            <a class="dropdown-item text-dark" href="{{ path('admin_compte_client', {'slug':cpt.slug}) }}">{{ cpt.type.nom }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if account is defined %}
+            <div class="card p-3">
+                <div class="row my-4 align-items-center">
+                    <div class="col-md-6"><p>Type : {{ account.type.nom }}</p></div>
+                    <div class="col-md-6"> <p>Numero : {{account.numero }}</p></div>
+                    <div class="col-md-6"><p>Ouverture : {{ account.ouverture |date("d/m/Y")   }}</p></div>
+                    <div class="col-md-6"><p>Solde  : <span class="bg-success text-dark px-3">{{ account.solde }}</span> XOF</p></div>
+                </div>
+                <div class="">
+                    <div class="row d-flex align-items-center">
+                        <div class="col-auto">
+                            <p>Liste des operations</p>
+                        </div>
+                        <!--
+                        <div class="col-auto">
+                            <select id="typeCompte" name="compte" class="form-control ">
+                                <option value="1"> Envoies </option>
+                                <option value="2"> Receptions </option>
+                                <option value="3"> Toutes les transactions</option>
+                            </select>
+                        </div>
+                        -->
+
+                    </div>
+
+
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">type</th>
+                            <th scope="col">Montant</th>
+                            <th scope="col">Source</th>
+                            <th scope="col">Receveur</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                            {% for op in account.operationSource %}
+                                <tr class="source">
+                                    <th scope="row">{{ op.date|date('Y-m-d H:i:s')}}</th>
+                                    <td>{{ op.type.libelle }}</td>
+                                    <td>{{ op.montant }}</td>
+                                    <td>{{ op.source.numero }} -- {{ op.source.client.nom }} {{ op.source.client.prenom }}</td>
+                                    <td> {% if op.receveur is not null %}{{ op.receveur.numero }} -- {{ op.receveur.client.nom }} {{ op.receveur.client.prenom }}  {% else %} - {% endif %} </td>
+                                </tr>
+                            {% endfor %}
+
+
+                            {% for op in account.operationReception %}
+                                <tr class="receveur">
+                                    <th scope="row">{{ op.date|date('Y-m-d H:i:s')}}</th>
+                                    <td>{{ op.type.libelle }}</td>
+                                    <td>{{ op.montant }}</td>
+                                    <td>{{ op.source.numero }} -- {{ op.source.client.nom }} {{ op.source.client.prenom }}</td>
+                                    <td> {% if op.receveur is not null %}{{ op.receveur.numero }} -- {{ op.receveur.client.nom }} {{ op.receveur.client.prenom }} {% else %} - {% endif %}</td>
+                                </tr>
+                            {% endfor %}
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
