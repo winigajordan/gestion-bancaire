@@ -23,6 +23,7 @@ class AuthentificatorAuthenticator extends AbstractLoginFormAuthenticator
 
     public function __construct(private UrlGeneratorInterface $urlGenerator)
     {
+
     }
 
     public function authenticate(Request $request): Passport
@@ -57,7 +58,7 @@ class AuthentificatorAuthenticator extends AbstractLoginFormAuthenticator
         }
 
         if (in_array('ROLE_CLIENT', $user->getRoles())) {
-            return new RedirectResponse($this->urlGenerator->generate('app_accueil'));
+            return new RedirectResponse($this->urlGenerator->generate('app_client'));
         }
 
 
@@ -69,4 +70,6 @@ class AuthentificatorAuthenticator extends AbstractLoginFormAuthenticator
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);
     }
+
+
 }

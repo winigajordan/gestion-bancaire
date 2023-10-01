@@ -1,0 +1,57 @@
+{% extends 'client/index.html.twig' %}
+{% block action %}
+    <div class="container">
+        {% for message in app.flashes('done') %}
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="alert alert-success alert-with-icon" data-notify="container">
+                    <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                        <i class="tim-icons icon-simple-remove"></i>
+                    </button>
+                    <span data-notify="icon" class="tim-icons icon-bell-55"></span>
+                    <span data-notify="message"> {{ message }}</span>
+                </div>
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('error') %}
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="alert alert-danger alert-with-icon" data-notify="container">
+                    <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+                        <i class="tim-icons icon-simple-remove"></i>
+                    </button>
+                    <span data-notify="icon" class="tim-icons icon-bell-55"></span>
+                    <span data-notify="message"> {{ message }}</span>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="card">
+            <div class="p-3">
+                <form class="" method="post" action="{{ path('client_transfert_new') }}">
+                    <div class="row d-flex align-items-center justify-content-center">
+                        <div class="form-group col-md-auto">
+                            <label for="inputEmail4">Liste des comptes du client</label>
+                            <select id="typeCompte" name="compte" class="form-control ">
+                                {% for cpt in comptes %}
+                                <option value="{{ cpt.id }}">{{ cpt.type.nom }} -- {{ cpt.solde }} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group col-md-auto">
+                            <label for="inputEmail4">Numero de compte de reception</label>
+                            <input type="number" name="receveur" min="10000000000000" minlength="16" class="form-control">
+                        </div>
+                        <div class="form-group col-md-auto">
+                            <label for="inputEmail4">Montant de la transaction</label>
+                            <input type="number" name="montant" class="form-control">
+                        </div>
+
+                        <div class="form-group col-md-auto">
+                            <input type="submit" value="Selectionner" class="btn">
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

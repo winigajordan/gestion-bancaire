@@ -1,0 +1,19 @@
+{% extends 'base.admin.html.twig' %}
+{% block content %}
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                Erreur 404 : Page introuvable
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-auto">
+                        <img height="250" width="250" src="https://img.freepik.com/vecteurs-libre/page-non-trouvee-illustration-du-concept_114360-1868.jpg?w=826&t=st=1696123927~exp=1696124527~hmac=8628a939a517f2c3c6812263ff7ea0ca7b6bec1d722cb53c58580cabd7d2d21d">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block action %} {% endblock %}
+{% endblock %}

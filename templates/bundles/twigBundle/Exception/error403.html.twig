@@ -1,0 +1,19 @@
+{% extends 'base.admin.html.twig' %}
+{% block content %}
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                Erreur 403 : Vous n'avez pas l'autorisation de vous rendre sur cet URL
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-auto">
+                        <img height="250" width="250" src="https://img.freepik.com/vecteurs-libre/erreur-403-interdite-police-illustration-concept_114360-1935.jpg?w=826&t=st=1696123622~exp=1696124222~hmac=17a0ac94c4dd620856c06376dc504f2aef5f6806f2b2c821abca7afea08a26de">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block action %} {% endblock %}
+{% endblock %}

@@ -226,17 +226,6 @@ class AdminDashboardController extends AbstractController
         $data = $request->request;
         $debut = \DateTime::createFromFormat('Y-m-d', $data->get('debut'), new \DateTimeZone('UTC'));
         $fin = \DateTime::createFromFormat('Y-m-d', $data->get('fin'), new \DateTimeZone('UTC'));
-        /*
-        $operations = $this->operationRepository->findAll();
-
-        $table = [];
-        foreach ($operations as $operation) {
-            $date = $operation->getDate();
-            if ($date >= $debut && $date <= $fin){
-                $table[] = $operation;
-            }
-        }
-        */
         $operations = $this->operationRepository->findByDate($debut, $fin, $this->manager);
 
         $retraits = 0;

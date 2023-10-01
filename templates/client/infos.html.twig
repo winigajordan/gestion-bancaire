@@ -1,0 +1,82 @@
+{% extends 'client/index.html.twig' %}
+{% block action %}
+    <div class="container">
+
+            <div class="card p-3">
+
+                <div class="row d-flex align-items-center">
+                    <div class="col-auto">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Liste des comptes du client
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                {% for cpt in comptes %}
+                                    <a class="dropdown-item text-dark" href="{{ path('client_load_info_dtl', {'slug':cpt.slug}) }}">{{ cpt.type.nom }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+    {% if account is defined %}
+
+            <div class="card p-3">
+                <div class="row my-4 align-items-center">
+                    <div class="col-md-6"><p>Type : {{ account.type.nom }}</p></div>
+                    <div class="col-md-6"> <p>Numero : {{account.numero }}</p></div>
+                    <div class="col-md-6"><p>Ouverture : {{ account.ouverture |date("d/m/Y")   }}</p></div>
+                    <div class="col-md-6"><p>Solde  : <span class="bg-success text-dark px-3">{{ account.solde }}</span> XOF</p></div>
+                </div>
+                <div class="">
+                    <div class="row d-flex align-items-center">
+                        <div class="col-auto">
+                            <p>Liste des operations</p>
+                        </div>
+
+                    </div>
+
+
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">type</th>
+                            <th scope="col">Montant</th>
+                            <th scope="col">Source</th>
+                            <th scope="col">Receveur</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for op in account.operationSource %}
+                            <tr class="source">
+                                <th scope="row">{{ op.date|date('Y-m-d H:i:s')}}</th>
+                                <td>{{ op.type.libelle }}</td>
+                                <td>{{ op.montant }} </td>
+                                <td>{{ op.source.numero }} -- {{ op.source.client.nom }} {{ op.source.client.prenom }}</td>
+                                <td>  {% if op.receveur is not null %}{{ op.receveur.numero }} -- {{ op.receveur.client.nom }} {{ op.receveur.client.prenom }}  {% else %} - {% endif %}  </td>
+                            </tr>
+                        {% endfor %}
+
+
+                        {% for op in account.operationReception %}
+                            <tr class="receveur">
+                                <th scope="row">{{ op.date|date('Y-m-d H:i:s')}}</th>
+                                <td>{{ op.type.libelle }}</td>
+                                <td>{{ op.montant }}</td>
+                                <td>{{ op.source.numero }} -- {{ op.source.client.nom }} {{ op.source.client.prenom }}</td>
+                                <td>{% if op.receveur is not null %}{{ op.receveur.numero }} -- {{ op.receveur.client.nom }} {{ op.receveur.client.prenom }} {% else %} - {% endif %}</td>
+                            </tr>
+                        {% endfor %}
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

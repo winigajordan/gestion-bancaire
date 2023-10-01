@@ -47,7 +47,7 @@ class CaisseCompteController extends AbstractController
     #[Route('/caisse/compte', name: 'caisse_compte')]
     public function index(): Response
     {
-        return $this->render('caisse_compte/index.html.twig', [
+        return $this->render('caisse_operation/compte.html.twig', [
             'types'=>$this->typeCompteRepository->findAll()
         ]);
     }
@@ -101,7 +101,7 @@ class CaisseCompteController extends AbstractController
 
         $this->manager->persist($compte);
         $this->manager->flush();
-        return $this->redirectToRoute('app_home');
+        return $this->redirectToRoute('caisse_compte');
     }
 
 }

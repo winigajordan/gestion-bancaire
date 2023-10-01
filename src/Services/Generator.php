@@ -6,7 +6,6 @@ use function Webmozart\Assert\Tests\StaticAnalysis\length;
 
 class Generator
 {
-
     public function generateAccountNumber(){
         $codeBank = "007";
         $codeGuichet = str_pad(random_int(1, 99), 2, "0");
@@ -20,6 +19,10 @@ class Generator
         }
         $cle = ((10 - $somme%10) % 10);
         return $numeroCompte.strval($cle);
+    }
+
+    public function generateCreditCard(){
+        return str_pad(random_int(50, 59), 4, strval(random_int(0,9))).' '.strval(random_int(1000,9999)).' '.strval(random_int(1000,9999)).' '.strval(random_int(1000,9999));
     }
 
 }
