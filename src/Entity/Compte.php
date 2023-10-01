@@ -44,10 +44,14 @@ class Compte
     #[ORM\JoinColumn(nullable: false)]
     private ?TypeCompte $type = null;
 
+    #[ORM\OneToMany(mappedBy: 'compte', targetEntity: CarteBancaire::class)]
+    private Collection $carteBancaires;
+
     public function __construct()
     {
         $this->operationSource = new ArrayCollection();
         $this->operationReception = new ArrayCollection();
+        $this->carteBancaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -195,6 +199,36 @@ class Compte
     public function setType(?TypeCompte $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CarteBancaire>
+     */
+    public function getCarteBancaires(): Collection
+    {
+        return $this->carteBancaires;
+    }
+
+    public function addCarteBancaire(CarteBancaire $carteBancaire): self
+    {
+        if (!$this->carteBancaires->contains($carteBancaire)) {
+            $this->carteBancaires->add($carteBancaire);
+            $carteBancaire->setCompte($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCarteBancaire(CarteBancaire $carteBancaire): self
+    {
+        if ($this->carteBancaires->removeElement($carteBancaire)) {
+            // set the owning side to null (unless already changed)
+            if ($carteBancaire->getCompte() === $this) {
+                $carteBancaire->setCompte(null);
+            }
+        }
 
         return $this;
     }

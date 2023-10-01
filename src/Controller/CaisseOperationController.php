@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\CarteBancaire;
 use App\Entity\Operation;
 use App\Repository\ClientRepository;
 use App\Repository\CompteRepository;
 use App\Repository\TypeOperationRepository;
+use App\Services\Generator;
+use App\Services\MailApi\MailSender;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,15 +21,25 @@ class CaisseOperationController extends AbstractController
     private CompteRepository $compteRepository;
     private TypeOperationRepository $typeOperationRepository;
     private  EntityManagerInterface $manager;
+    private Generator $generator;
+    private MailSender $sender;
 
-
-    public function __construct(ClientRepository $clientRepository, CompteRepository $compteRepository, TypeOperationRepository $typeOperationRepository, EntityManagerInterface $manager)
+    /**
+     * @param ClientRepository $clientRepository
+     * @param CompteRepository $compteRepository
+     * @param TypeOperationRepository $typeOperationRepository
+     * @param EntityManagerInterface $manager
+     * @param Generator $generator
+     * @param MailSender $sender
+     */
+    public function __construct(ClientRepository $clientRepository, CompteRepository $compteRepository, TypeOperationRepository $typeOperationRepository, EntityManagerInterface $manager, Generator $generator, MailSender $sender)
     {
         $this->clientRepository = $clientRepository;
         $this->compteRepository = $compteRepository;
         $this->typeOperationRepository = $typeOperationRepository;
         $this->manager = $manager;
-
+        $this->generator = $generator;
+        $this->sender = $sender;
     }
 
 
@@ -72,7 +85,8 @@ class CaisseOperationController extends AbstractController
         $this->manager->persist($operation);
         $compte->setSolde($compte->getSolde()+$data->get('montant'));
         $this->manager->persist($compte);
-
+        $contenu = "Vous venez d'effectuer un depot d'un montant de ".strval($data->get('montant'))." ce ".date_format($operation->getDate(), 'd-m-Y H:i:s');
+        $this->sender->send($compte->getClient()->getEmail(), $compte->getClient()->getNom(), "Depot", $contenu);
 
         $this->manager->flush();
 
@@ -125,6 +139,36 @@ class CaisseOperationController extends AbstractController
 
         $this->addFlash('done', 'Retrait effectue');
         return $this->redirectToRoute('caisse_load_retrait');
+    }
+
+
+    #[Route('/caisse/carte', name: 'caisse_load_carte')]
+    public function loadCarte(): Response
+    {
+        return $this->render('caisse_operation/carte.html.twig');
+    }
+
+    #[Route('/caisse/carte/create', name: 'caisse_add_carte')]
+    public function createCarte(Request $request): Response
+    {
+        $compte = $this->compteRepository->findOneBy(['numero'=>$request->request->get('numero')]);
+        if ($compte==null){
+            $this->addFlash('error', 'Numero incorrecte');
+        } else {
+            $carte = (new CarteBancaire())
+                ->setNumero($this->generator->generateCreditCard())
+                ->setCode(strval(random_int(100, 999)))
+                ->setEtat(true)
+                ->setDateCreation(new \DateTime())
+                ->setDateExpiration((new  \DateTime())->add(new \DateInterval('P2Y')))
+                ->setCodeSecurite(strval(intval(1000, 9999)))
+                ->setPlafond(1000000)
+                ->setCompte($compte);
+            $this->manager->persist($carte);
+            $this->manager->flush();
+            $this->addFlash('done', 'Carte cree');
+        }
+        return $this->render('caisse_operation/carte.html.twig');
     }
 
 

@@ -1,0 +1,19 @@
+{% extends 'base.admin.html.twig' %}
+{% block content %}
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                Erreur 500 : Si vous venez de remplir un formulaire, assurez vous que tous les champs soient correctement remplis
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-auto">
+                        <img src="https://static.doofinder.com/main-files/uploads/2019/09/error-500-doofinder.jpg">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block action %} {% endblock %}
+{% endblock %}
